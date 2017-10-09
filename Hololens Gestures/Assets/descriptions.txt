@@ -1,0 +1,95 @@
+﻿0
+In this study you will be using different techniques for hand gestures to resize and rotate holographic objects on the Microsoft Hololens. There will be five sections, and each section will have a different technique for resizing and rotating holograms. Within each section, there are seven rounds. The first round is a training period in which you can practice the section's hand gesture to get used to the gestures for rotating and resizing a hologram. The following six rounds will have a target hologram orientation on the left, and another hologram on the right. Your task is to resize and rotate the hologram on the right so that it best matches the scale and rotation of the target hologram on the left. With the exception of the training round, you should try to complete each round as quickly and accurately as possible. After you have completed each round, you will be able to continue to the next round by pressing the "Continue" button on the menu above. When you have completed every round within a section, you can rest your arms until you are ready to proceed to the next section. When you are ready to begin the first section, please press "Continue" above.
+
+1
+You are now entering the practice stage for the "Lock Into Gesture Technique". This gesture uses both hands. When both hands are raised in the "L" ready position, you will see indicators on the object. The indicators on the right and left are associated with the right and left hands, respectively. A green indicator represents a tracked hand, red indicates that the hand has been lost. Yellow indicates that the hand is pinched.
+
+Resize Gesture: Both hands raised diagonally to each other in the "L" position you will see arrows pointing out at the corners of the object. Pinch and move hands together or apart to resize the object.
+
+Rotation Gesture: Both hands raised in the "L" position at the same height, you will get the indicators necessary for a rotation. This will be explained in more detail in later instructions.
+
+
+Press "Continue" above when you are ready to practice each gesture.
+
+2
+Lock Into Gesture Rotation Technique: Resizing
+
+Please look at the object to the right and raise both of your hands in the "L" ready position infront of you. Place one hand slightly higher than the other. You will see arrows coming out of the corners of the object.
+
+Resize: Pinch both hands and move them apart to make the object larger, or together to make the object smaller.
+
+Practice this gesture until you are comfortable with it, and press "Continue" when you are ready to move on to the rotation gestures.
+
+3
+Lock Into Gesture Rotation Technique: Rotation
+
+Please look at the object to the right and raise both of your hands in the "L" ready position infront of you. Keep both hands at the same height. Depending on which way you move your hands after pinching in this position, a different rotation will begin:
+
+Roll Rotation (Rotation about x axis): Pinch both hands and move one hand down, and the other up to begin the rotation.
+
+Pitch Rotation (Rotation about z axis): Pinch both hands and move both hands up, or both hands down to begin the rotation.
+
+Yaw Rotation (Rotation about y axis): Pinch both hands and move one hand away from your face, and the other hand towards your face to begin the rotation.
+
+Practice these rotation gestures and use the indicator above the objects as guidance until you are comfortable with them, and press "Continue" when you are ready to move on.
+
+4
+You are now entering the practice stage for the "Hand Starting Positions Technique". This gesture uses both hands. When both hands are raised in the "L" ready position, you will see indicators on the object. The indicators on the right and left are associated with the right and left hands, respectively. A green indicator represents a tracked hand, red indicates that the hand has been lost. Yellow indicates that the hand is pinched.
+
+Resize Gesture: With both hands raised diagonally to each other, the same distance from your face, you will see arrows pointing out at the corners of the object. Pinch and move hands together or apart to resize the object.
+
+Rotation Gesture: Other starting positions will invoke other rotation gestures. These positions will be explained in later instructions.
+
+Press "Continue" above when you are ready to practice each gesture.
+
+5
+Hand Starting Positions Technique: Resizing
+
+Please look at the object to the right and raise both of your hands in the "L" ready position infront of you. Place one hand slightly higher than the other. You will see arrows coming out of the corners of the object.
+
+Resize: Pinch both hands and move them apart to make the object larger, or together to make the object smaller.
+
+Practice this gesture until you are comfortable with it, and press "Continue" when you are ready to move on to the rotation gestures.
+
+6
+Hand Starting Positions Technique: Rotation
+
+Please look at the object to the right and raise both of your hands in the "L" ready position infront of you. The rotation gesture that you perform depends on the starting position of your hands. Every time you move your hands to a different starting position, you will see the indicators on the object change as well.
+
+Roll Rotation (Rotation about x axis): Place both hands in the "L" position at the same height, and same distance from your face. Pinch both hands and move one hand down, and the other up to begin the rotation.
+
+Pitch Rotation (Rotation about z axis): Place both hands in the "L" position at different heights, and different distances from your face. Pinch both hands  and move one hand away from your face, and the other hand towards your face to begin the rotation.
+
+Yaw Rotation (Rotation about y axis): Place both hands in the "L" position at the same height, but different distances from your face. Pinch both hands and move one hand away from your face, and the other hand towards your face to begin the rotation.
+
+Practice each rotation gesture multiple times and use the indicator above the objects as guidance until you are comfortable with them, and press "Continue" when you are ready to move on.
+
+7
+You are now entering the practice stage for the "Spindle Technique". This gesture uses both hands. When both hands are raised in the "L" ready position, you will see indicators in the shape of a spindle going through the object. The indicators on the right and left are associated with the right and left hands, respectively. A green indicator represents a tracked hand, red indicates that the hand has been lost. Yellow indicates that the hand is pinched.
+
+Resize Gesture: With both hands raised pinch and move hands together or apart to resize the object.
+
+Rotation Gesture: Pinching the spindle and moving your hands around will rotate the spindle. Both hands raising or lowering will adjust the pitch of the spindle. These positions will be explained in later instructions.
+
+Press "Continue" above when you are ready to practice each gesture.
+
+8
+Spindle Technique: Resizing
+
+Please look at the object to the right and raise both of your hands in the "L" ready position infront of you. You will see a spindle going through the object.
+
+Resize: Pinch both hands and move them apart to make the object larger, or together to make the object smaller.
+
+Practice this gesture until you are comfortable with it, and press "Continue" when you are ready to move on to the rotation gestures.
+
+
+9
+Spindle Technique: Rotation
+
+Please look at the object to the right and raise both of your hands in the "L" ready position infront of you.
+
+Roll and Yaw Rotation (Rotation about x, and y axis): Place both hands in the "L" position and pinch both hands. Move hands, adjusting the orientation of the spindle and watch the rotation of the object adjust following the position of the spindle.
+
+Pitch Rotation (Rotation about z axis): Place both hands in the "L" position and pinch both hands. Move both hands upward or both hands downward to spin the object about the spindle's axis.
+
+Practice each rotation gesture multiple times, and get used comfortable with adjusting the orientation of the spindle as well as moving hands up and down to adjust pitch. Press "Continue" when you are ready to move on.
