@@ -84,17 +84,16 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 	public GameObject yawCursor;
 	public GameObject rollCursor;
 	public GameObject technique5Panel;
-	public Button stopStudy;
-	public string sentText = "";
+    public string sentText = "";
 
 	public string[] codes;
 	public Text userIDText;
 	public Text instructionPanelText;
 	[TextArea(3, 100)]
 	public string[] instructionTexts;
-	public VideoClip[] videosToPlay;
+    public VideoClip[] videosToPlay;
 	public AudioClip[] audioToPlay;
-	public string[] techniqueNames;
+    public string[] techniqueNames;
 
 	public Button beginUserStudyButton;
 	public Button [] techniqueButtons;
@@ -131,7 +130,7 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 	internal Vector3 leftHandPosition;
 	internal float leftHandDistance;
 
-	public Button startRoundButton;
+    public Button startRoundButton;
 	public GameObject Managers;
 	public GameObject GameObjectCollection;
 	public GameObject HologramCollection;
@@ -139,7 +138,7 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 	public GameObject ArrowsAndAxis;
 	public GameObject BoundingSphere;
 	public GameObject Technique5Objects;
-	public GameObject videoPlayer;
+    public GameObject videoPlayer;
 
 	internal float arcBallRadius;
 	internal Vector3 rightHandPosition;
@@ -185,35 +184,25 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 
 	static bool isLoaded = false;
 
-	public void setTechnique(int type) {
+    public void setTechnique(int type) {
 		if (type == TECHNIQUE_5)
 			BoundBoxes_BoundBox.initialized = false;
 
 		TwoHandedGesturesManager.TECHNIQUE_SELECTED = type;
-		print ("TECHNIQUE IS NOWs SET TO " + type);
 		int index = myUserStudyManager.hologramIndex + 1;
 		int section = myUserStudyManager.USER_STUDY_TECHNIQUE_INDEX + 1;
 
-        if (myUserStudyManager.IN_USER_STUDY)
-        {
+		if(myUserStudyManager.IN_USER_STUDY)
 			menuText.text = "Section " + section + " of " + TwoHandedUserStudyManager.NUM_TECHNIQUES + ", Round " + index + " of " + myUserStudyManager.hologramCount;
-            //
-
-			TwoHandedGesturesManager.TECHNIQUE_SELECTED = type;
-			myUserStudyManager.finishUserStudy();
-			//myUserStudyManager.initializeUserStudy();
-			Update();
-			myUserStudyManager.UserStudyButtonPressed ();
-        }
-        else
-            menuText.text = techniqueNames[type - 1];
+		else
+			menuText.text = techniqueNames[type - 1];
 		CancelManipulation();
 		myArrowsManager.HideArrows();
 	} 
 
 	void changeGestureType(int i) {
-		technique5Selection = i;
-		print("selection is now " + i);
+			technique5Selection = i;
+			print("selection is now " + i);
 	}
 
 	void Awake () {
@@ -261,7 +250,7 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		myArrowsManager.InitializeRotationAxis ();
 		myArrowsManager.HideArrows();
 
-		myUserStudyManager.hideInstructions();
+        myUserStudyManager.hideInstructions();
 
 		// listeners for techniquebuttons
 		techniqueButtons[0].onClick.AddListener(() => { setTechnique(1); });
@@ -290,14 +279,13 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		technique5Buttons[2].onClick.AddListener(() => { changeGestureType(2); });
 		technique5Buttons[3].onClick.AddListener(() => { changeGestureType(3); });
 
-		stopStudy.onClick.AddListener(() => { myUserStudyManager.finishUserStudy(); });
-		startRoundButton.onClick.AddListener(() => { myUserStudyManager.beginRound(); });
-		startRoundButton.gameObject.SetActive(false);
-		setTechnique (1);
+        startRoundButton.onClick.AddListener(() => { myUserStudyManager.beginRound(); });
+        startRoundButton.gameObject.SetActive(false);
+        setTechnique (1);
 
-		VideoPlayer player = videoPlayer.GetComponent<VideoPlayer>();
-		player.playbackSpeed = 0.65f;
-		CancelManipulation();
+        VideoPlayer player = videoPlayer.GetComponent<VideoPlayer>();
+        player.playbackSpeed = 0.65f;
+        CancelManipulation();
 		//tap recognized anywhere
 		InputManager.Instance.PushFallbackInputHandler (gameObject);
 
@@ -321,34 +309,34 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 
 	void CancelManipulation() {
 		if((resizing || rotating) && myUserStudyManager.IN_USER_STUDY)
-		{
+        {
+            
+            SaveDataClass data = new SaveDataClass(myUserStudyManager);
 
-			SaveDataClass data = new SaveDataClass(myUserStudyManager);
+            if (resizing)
+            {
+                data.inResizeGesture = true;
+            }
+            if (rotating)
+            {
+                data.inRotationGesture = true;
+            }
+            data.endingGesture = true;
 
-			if (resizing)
-			{
-				data.inResizeGesture = true;
-			}
-			if (rotating)
-			{
-				data.inRotationGesture = true;
-			}
-			data.endingGesture = true;
+            if (myUserStudyManager.inTraining())
+            {
+                data.training = true;
+                data.trainingSection = myUserStudyManager.practiceFrame.ToString();
+            } else
+            {
+                int index = myUserStudyManager.hologramIndex;
+                GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
+                GameObject targetObject = myUserStudyManager.targetGameObjects[index];
+                data.setTransforms(manipulatableObject, targetObject);
+            }
 
-			if (myUserStudyManager.inTraining())
-			{
-				data.training = true;
-				data.trainingSection = myUserStudyManager.practiceFrame.ToString();
-			} else
-			{
-				int index = myUserStudyManager.hologramIndex;
-				GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
-				GameObject targetObject = myUserStudyManager.targetGameObjects[index];
-				data.setTransforms(manipulatableObject, targetObject);
-			}
-
-			myUserStudyManager.SaveDataExtended(data);
-		}
+            myUserStudyManager.SaveDataExtended(data);
+        }
 		rotating = false;
 		resizing = false;
 		rotationGesture = false;
@@ -367,44 +355,44 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 
 	}
 	public virtual void OnInputUp(InputEventData eventData) {
-		if (myUserStudyManager.IN_USER_STUDY)
-		{
-			SaveDataClass data = new SaveDataClass(myUserStudyManager);
+        if (myUserStudyManager.IN_USER_STUDY)
+        {
+            SaveDataClass data = new SaveDataClass(myUserStudyManager);
 
-			if (resizing)
-			{
-				data.inResizeGesture = true;
-			}
-			if (rotating)
-			{
-				data.inRotationGesture = true;
-			}
-			if (eventData.SourceId == leftID)
-				data.leftUp = true;
-			if (eventData.SourceId == rightID)
-				data.rightUp = true;
+            if (resizing)
+            {
+                data.inResizeGesture = true;
+            }
+            if (rotating)
+            {
+                data.inRotationGesture = true;
+            }
+            if (eventData.SourceId == leftID)
+                data.leftUp = true;
+            if (eventData.SourceId == rightID)
+                data.rightUp = true;
 
-			if (myUserStudyManager.inTraining())
-			{
-				data.training = true;
-				data.trainingSection = myUserStudyManager.practiceFrame.ToString();
-			}
-			else
-			{
-				int index = myUserStudyManager.hologramIndex;
-				GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
-				GameObject targetObject = myUserStudyManager.targetGameObjects[index];
-				data.setTransforms(manipulatableObject, targetObject);
-			}
+            if (myUserStudyManager.inTraining())
+            {
+                data.training = true;
+                data.trainingSection = myUserStudyManager.practiceFrame.ToString();
+            }
+            else
+            {
+                int index = myUserStudyManager.hologramIndex;
+                GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
+                GameObject targetObject = myUserStudyManager.targetGameObjects[index];
+                data.setTransforms(manipulatableObject, targetObject);
+            }
 
-			myUserStudyManager.SaveDataExtended(data);
-		}
+            myUserStudyManager.SaveDataExtended(data);
+        }
 
-		CancelManipulation();
+        CancelManipulation();
 	}
 
 	public void beginGesture() {
-
+		
 
 		initialLeft = leftHandPosition;
 		initialRight = rightHandPosition;
@@ -502,79 +490,79 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 			}
 		}
 
-		if (myUserStudyManager.IN_USER_STUDY)
-		{
-			setInteractable(beginUserStudyButton);
-			userStudyButtonText.text = "Continue";
-			myUserStudyManager.gestureAttempts++;
-			print("beginning manipulation timer");
-			myUserStudyManager.totalTimeManipulating.Start();
+        if (myUserStudyManager.IN_USER_STUDY)
+        {
+            setInteractable(beginUserStudyButton);
+            userStudyButtonText.text = "Continue";
+            myUserStudyManager.gestureAttempts++;
+            print("beginning manipulation timer");
+            myUserStudyManager.totalTimeManipulating.Start();
 
-			SaveDataClass data = new SaveDataClass(myUserStudyManager);
-			data.beginningGesture = true;
+            SaveDataClass data = new SaveDataClass(myUserStudyManager);
+            data.beginningGesture = true;
 
-			if (resizing)
-			{
-				data.inResizeGesture = true;
-			}
-			if (rotating)
-			{
-				data.inRotationGesture = true;
-			}
-			if (myUserStudyManager.inTraining())
-			{
-				data.training = true;
-				data.trainingSection = myUserStudyManager.practiceFrame.ToString();
-			}
-			else
-			{
-				int index = myUserStudyManager.hologramIndex;
-				GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
-				GameObject targetObject = myUserStudyManager.targetGameObjects[index];
-				data.setTransforms(manipulatableObject, targetObject);
-			}
+            if (resizing)
+            {
+                data.inResizeGesture = true;
+            }
+            if (rotating)
+            {
+                data.inRotationGesture = true;
+            }
+            if (myUserStudyManager.inTraining())
+            {
+                data.training = true;
+                data.trainingSection = myUserStudyManager.practiceFrame.ToString();
+            }
+            else
+            {
+                int index = myUserStudyManager.hologramIndex;
+                GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
+                GameObject targetObject = myUserStudyManager.targetGameObjects[index];
+                data.setTransforms(manipulatableObject, targetObject);
+            }
 
-			myUserStudyManager.SaveDataExtended(data);
-		}
+            myUserStudyManager.SaveDataExtended(data);
+        }
 
-		leftTapped = rightTapped = false;
+        leftTapped = rightTapped = false;
 	}
 
 	public virtual void OnInputDown(InputEventData eventData) {
 
-		if(myUserStudyManager.IN_USER_STUDY)
-		{
-			SaveDataClass data = new SaveDataClass(myUserStudyManager);
+        if(myUserStudyManager.IN_USER_STUDY)
+        {
+            SaveDataClass data = new SaveDataClass(myUserStudyManager);
 
-			if (resizing)
-			{
-				data.inResizeGesture = true;
-			}
-			if (rotating)
-			{
-				data.inRotationGesture = true;
-			}
+            if (resizing)
+            {
+                data.inResizeGesture = true;
+            }
+            if (rotating)
+            {
+                data.inRotationGesture = true;
+            }
 
-			if (eventData.SourceId == leftID)
-				data.leftDown = true;
-			if (eventData.SourceId == rightID)
-				data.rightDown = true;
+            if (eventData.SourceId == leftID)
+                data.leftDown = true;
+            if (eventData.SourceId == rightID)
+                data.rightDown = true;
 
-			if (myUserStudyManager.inTraining())
-			{
-				data.training = true;
-				data.trainingSection = myUserStudyManager.practiceFrame.ToString();
-			}
-			else
-			{
-				int index = myUserStudyManager.hologramIndex;
-				GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
-				GameObject targetObject = myUserStudyManager.targetGameObjects[index];
-				data.setTransforms(manipulatableObject, targetObject);
-			}
+            if (myUserStudyManager.inTraining())
+            {
+                data.training = true;
+                data.trainingSection = myUserStudyManager.practiceFrame.ToString();
+            }
+            else
+            {
+                int index = myUserStudyManager.hologramIndex;
+                GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
+                GameObject targetObject = myUserStudyManager.targetGameObjects[index];
+                data.setTransforms(manipulatableObject, targetObject);
+            }
 
-			myUserStudyManager.SaveDataExtended(data);
-		}
+            myUserStudyManager.SaveDataExtended(data);
+        }
 		if (eventData.SourceId == leftID) {
 			myUserStudyManager.leftTaps++;
 			leftTapped = true;
@@ -604,9 +592,9 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 			} else {
 				handBeingTrackedPosition = rightHandPosition;
 			}
-			if((leftTapped && (handBeingTracked == leftID) && !foundRight) || (rightTapped && (handBeingTracked == rightID) && !foundLeft)) {
-				beginGesture();
-			}
+				if((leftTapped && (handBeingTracked == leftID) && !foundRight) || (rightTapped && (handBeingTracked == rightID) && !foundLeft)) {
+					beginGesture();
+				}
 		}
 	}
 
@@ -683,29 +671,29 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 						ColorLeftObjects(leftCorrectColor);
 					}
 				} else {
-					leftID = (int)hand.source.id;
-					if(handBeingTracked == -1) {
-						handBeingTracked = leftID;
-					}
-					leftFound = true;
-					leftHandPosition = pos;
-					leftHandDistance = Vector3.Distance(pos, camPos);
-					if(handBeingTracked == leftID) {
-						handBeingTrackedPosition = pos;
-						trackedFound = true;
-					}
-					if(!hand.pressed) {
-						leftCorrectColor = new Color(0, 255, 0);
-						handsOpen++;
-						leftTapped = false;
-						leftOpen = true;
-					} else {
-						leftCorrectColor = new Color(255, 255, 0);
-					}
-					ColorLeftObjects(leftCorrectColor);
-					if(TECHNIQUE_SELECTED == TECHNIQUE_4) {
-						ColorRightObjects(leftCorrectColor);
-					}
+						leftID = (int)hand.source.id;
+						if(handBeingTracked == -1) {
+							handBeingTracked = leftID;
+						}
+						leftFound = true;
+						leftHandPosition = pos;
+						leftHandDistance = Vector3.Distance(pos, camPos);
+						if(handBeingTracked == leftID) {
+							handBeingTrackedPosition = pos;
+							trackedFound = true;
+						}
+						if(!hand.pressed) {
+							leftCorrectColor = new Color(0, 255, 0);
+							handsOpen++;
+							leftTapped = false;
+							leftOpen = true;
+						} else {
+							leftCorrectColor = new Color(255, 255, 0);
+						}
+						ColorLeftObjects(leftCorrectColor);
+						if(TECHNIQUE_SELECTED == TECHNIQUE_4) {
+							ColorRightObjects(leftCorrectColor);
+						}
 				}
 			}
 		}
@@ -753,39 +741,39 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 
 		//if we lost a hand that was previously found
 		if (myUserStudyManager.IN_USER_STUDY && ((!leftFound && foundLeft) || (!rightFound && foundRight)))
-		{
-			SaveDataClass data = new SaveDataClass(myUserStudyManager);
+        {
+            SaveDataClass data = new SaveDataClass(myUserStudyManager);
 
-			if (resizing)
-			{
-				data.inResizeGesture = true;
-			}
-			if (rotating)
-			{
-				data.inRotationGesture = true;
-			}
-			if (!leftFound && foundLeft)
-				data.leftLost = true;
-			if (!rightFound && foundRight)
-				data.rightLost = true;
+            if (resizing)
+            {
+                data.inResizeGesture = true;
+            }
+            if (rotating)
+            {
+                data.inRotationGesture = true;
+            }
+            if (!leftFound && foundLeft)
+                data.leftLost = true;
+            if (!rightFound && foundRight)
+                data.rightLost = true;
 
-			if (myUserStudyManager.inTraining())
-			{
-				data.training = true;
-				data.trainingSection = myUserStudyManager.practiceFrame.ToString();
-			}
-			else
-			{
-				int index = myUserStudyManager.hologramIndex;
-				GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
-				GameObject targetObject = myUserStudyManager.targetGameObjects[index];
-				data.setTransforms(manipulatableObject, targetObject);
-			}
+            if (myUserStudyManager.inTraining())
+            {
+                data.training = true;
+                data.trainingSection = myUserStudyManager.practiceFrame.ToString();
+            }
+            else
+            {
+                int index = myUserStudyManager.hologramIndex;
+                GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
+                GameObject targetObject = myUserStudyManager.targetGameObjects[index];
+                data.setTransforms(manipulatableObject, targetObject);
+            }
 
-			myUserStudyManager.SaveDataExtended(data);
-		}
+            myUserStudyManager.SaveDataExtended(data);
+        }
 
-		foundRight = rightFound;
+        foundRight = rightFound;
 		foundLeft = leftFound;
 		foundTracked = trackedFound;
 
@@ -839,8 +827,8 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 				float scale;
 				// lower the number of division to increase scale
 				scale = Vector3.Distance (handBeingTrackedPosition, objCenter) / 1.2f;
-
-
+	            
+				
 				Vector3 scaledLocation = Vector3.MoveTowards (handBeingTrackedPosition, Camera.main.transform.position, -scale);
 
 				arcBallHandPosition = Vector3.MoveTowards (scaledLocation, objCenter, Vector3.Distance (scaledLocation, objCenter) - arcBallRadius);
@@ -848,113 +836,85 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		}
 		//if hands are lost and we're doing spindle technique, bail on manipulation
 		if((handsFound < 2) && (TECHNIQUE_SELECTED == TECHNIQUE_3) && (resizing || rotating)) {
-			CancelManipulation();
-			if(myUserStudyManager.RECORD_INFORMATION) {
-				if(foundLeft)
-					myUserStudyManager.leftHandLosses++;
-				if(foundRight)
-					myUserStudyManager.rightHandLosses++;
-			}
+					CancelManipulation();
+					if(myUserStudyManager.RECORD_INFORMATION) {
+						if(foundLeft)
+							myUserStudyManager.leftHandLosses++;
+						if(foundRight)
+							myUserStudyManager.rightHandLosses++;
+					}
 
-
-			foundLeft = false;
-			foundRight = false;
-			myArrowsManager.HideArrows();
+           
+            foundLeft = false;
+					foundRight = false;
+					myArrowsManager.HideArrows();
 		}
 	}
 
-	public void resetGameObjects()
-	{
-		SceneManager.LoadScene(0);
-		sentText = "";
-	}
+    public void resetGameObjects()
+    {
+        SceneManager.LoadScene(0);
+        sentText = "";
+    }
 
 	void OnGUI() {
 		Event e = Event.current;
-		if (e.type == EventType.KeyUp && e.isKey && e.keyCode != KeyCode.None)
-		{
-			Debug.Log("Detected key code: " + e.keyCode.ToString());
-			sentText += e.keyCode.ToString();
-			print("sent text is now " + sentText);
-			if (e.keyCode.ToString().Equals("X"))
-			{
+        if (e.type == EventType.KeyUp && e.isKey && e.keyCode != KeyCode.None)
+        {
+            Debug.Log("Detected key code: " + e.keyCode.ToString());
+            sentText += e.keyCode.ToString();
+            print("sent text is now " + sentText);
+            if (e.keyCode.ToString().Equals("X"))
+            {
+                sentText = "";
+            }
+            if(sentText.Equals("RESET"))
+            {
+                resetGameObjects();
+            }
+            if(sentText.Equals("HARDRESET"))
+            {
 				sentText = "";
-			}
-			if(sentText.Equals("RESET"))
-			{
-				resetGameObjects();
-			}
-            if (sentText.Equals("PRESS"))
-            {
-                myUserStudyManager.UserStudyButtonPressed();
+                SceneManager.LoadScene(0);
             }
-            if (sentText.Equals("END"))
+            if(sentText.Contains("USER"))
             {
-                myUserStudyManager.finishUserStudy();
-            }
-            if (sentText.Equals("ONE"))
-            {
-                setTechnique(1);
-            }
-            if (sentText.Equals("TWO"))
-            {
-                setTechnique(2);
-            }
-            if (sentText.Equals("THREE"))
-            {
-                setTechnique(3);
-            }
-            if (sentText.Equals("FOUR"))
-            {
-                setTechnique(4);
-            }
-            if (sentText.Equals("FIVE"))
-            {
-                setTechnique(5);
-            }
-            if (sentText.Equals("HARDRESET"))
-			{
-				sentText = "";
-				SceneManager.LoadScene(0);
-			}
-			if(sentText.Contains("USER"))
-			{
-				if(sentText.EndsWith("USER") && sentText.Length != "USER".Length)
-				{
-					sentText = sentText.Replace("USER", "");
-					sentText = sentText.Replace("Alpha", "");
+                if(sentText.EndsWith("USER") && sentText.Length != "USER".Length)
+                {
+                    sentText = sentText.Replace("USER", "");
+                    sentText = sentText.Replace("Alpha", "");
 
-					print("result is " + sentText);
+                    print("result is " + sentText);
 					userIDText.text = sentText;
 					myUserStudyManager.UserStudyButtonPressed ();
-					sentText = "";
-				}
-			}
-			if (sentText.Contains("TECHNIQUE"))
-			{
-				if (sentText.EndsWith("TECHNIQUE") && sentText.Length != "TECHNIQUE".Length)
-				{
-					sentText = sentText.Replace("TECHNIQUE", "");
-					sentText = sentText.Replace("Alpha", "");
+                    sentText = "";
+                }
+            }
+            if (sentText.Contains("TECHNIQUE"))
+            {
+                if (sentText.EndsWith("TECHNIQUE") && sentText.Length != "TECHNIQUE".Length)
+                {
+                    sentText = sentText.Replace("TECHNIQUE", "");
+                    sentText = sentText.Replace("Alpha", "");
 
-					myUserStudyManager.performTechnique(sentText);
-					sentText = "";
-				}
-			}
-		}
+                    myUserStudyManager.performTechnique(sentText);
+                    sentText = "";
+                }
+            }
+        }
 	}
 
 	void DrawWireSphere() {
-		if(TECHNIQUE_SELECTED == TECHNIQUE_4 || TECHNIQUE_SELECTED == TECHNIQUE_3 || TECHNIQUE_SELECTED == TECHNIQUE_6) {
-			float scale = arcBallRadius / 0.5f;
-			boundingSphere.GetComponent<Renderer>().transform.position = objCenter;
-			boundingSphere.GetComponent<Renderer>().transform.localScale = new Vector3(scale, scale, scale);
-			boundingSphere.SetActive(true);
-			// myCursorManager.SHOW_BOUNDING_BOX = false;
-		} else {
-			boundingSphere.SetActive(false);
-			// myCursorManager.SHOW_BOUNDING_BOX = true;
-		}
+			if(TECHNIQUE_SELECTED == TECHNIQUE_4 || TECHNIQUE_SELECTED == TECHNIQUE_3 || TECHNIQUE_SELECTED == TECHNIQUE_6) {
+				float scale = arcBallRadius / 0.5f;
+				boundingSphere.GetComponent<Renderer>().transform.position = objCenter;
+				boundingSphere.GetComponent<Renderer>().transform.localScale = new Vector3(scale, scale, scale);
+				boundingSphere.SetActive(true);
+				// myCursorManager.SHOW_BOUNDING_BOX = false;
+			} else {
+				boundingSphere.SetActive(false);
+				// myCursorManager.SHOW_BOUNDING_BOX = true;
+			}
 	}
 
 	void setInteractable(Button button) {
@@ -1009,7 +969,7 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		//_instance.MenuCollection = MenuCollection;
 		_instance.counter = counter;
 	}
-	// Update is called once per frame
+		// Update is called once per frame
 	void Update () {
 		userIDText.text = "101";
 		//print ("camera is at " + Camera.main.transform.position);
@@ -1025,9 +985,9 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 			if(TECHNIQUE_SELECTED == TECHNIQUE_2 && (objFocused != null)) {
 				myArrowsManager.enableTechnique2Image();
 			} else {
-				technique2Image.SetActive(false);
-				myArrowsManager.rotationAxisRenderer2.enabled = false;
-			}
+                technique2Image.SetActive(false);
+                myArrowsManager.rotationAxisRenderer2.enabled = false;
+            }
 		}
 		VideoPlayer player = videoPlayer.GetComponent<VideoPlayer> ();
 		if (player.isPrepared && !player.isPlaying && myUserStudyManager.shouldPlay)
@@ -1041,11 +1001,11 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		}
 		if(!myUserStudyManager.IN_USER_STUDY) {
 			//if(userIDText.text == "") {
-			// print("beginUserStudyButton: Enabled: unknown Interactable: false");
-			//beginUserStudyButton.interactable = false;
+				// print("beginUserStudyButton: Enabled: unknown Interactable: false");
+				//beginUserStudyButton.interactable = false;
 			//} else {
-			// print("beginUserStudyButton: Enabled: true Interactable: true");
-			setInteractable(beginUserStudyButton);
+				// print("beginUserStudyButton: Enabled: true Interactable: true");
+				setInteractable(beginUserStudyButton);
 			//}
 		} else {
 			if(instructionPanel.activeSelf && !myUserStudyManager.disableTimedButton) {
@@ -1068,15 +1028,15 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		}
 
 		if(TECHNIQUE_SELECTED == TECHNIQUE_6) {
-			technique5Panel.SetActive(true);
-			Vector3 panelPosition;
-			Vector3 objSize = boundingCube.transform.localScale;
+				technique5Panel.SetActive(true);
+				Vector3 panelPosition;
+				Vector3 objSize = boundingCube.transform.localScale;
 
-			panelPosition = TwoHandedArrowsManager.GetBoundingCornerPosition (0, objSize.y + .09f, -objSize.z/2, boundingCube);
+				panelPosition = TwoHandedArrowsManager.GetBoundingCornerPosition (0, objSize.y + .09f, -objSize.z/2, boundingCube);
 
-			MoveObject(technique5Panel, panelPosition);
+				MoveObject(technique5Panel, panelPosition);
 
-			technique5Buttons[technique5Selection].Select();
+				technique5Buttons[technique5Selection].Select();
 		} else {
 			technique5Panel.SetActive(false);
 		}
@@ -1139,37 +1099,37 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 			}
 
 			if (myUserStudyManager.IN_USER_STUDY && (foundLeft || foundRight) && InteractionManager.numSourceStates == 0)
-			{
-				SaveDataClass data = new SaveDataClass(myUserStudyManager);
+            {
+                SaveDataClass data = new SaveDataClass(myUserStudyManager);
 
-				if (resizing)
-				{
-					data.inResizeGesture = true;
-				}
-				if (rotating)
-				{
-					data.inRotationGesture = true;
-				}
-				if (foundLeft)
-					data.leftLost = true;
-				if (foundRight)
-					data.rightLost = true;
+                if (resizing)
+                {
+                    data.inResizeGesture = true;
+                }
+                if (rotating)
+                {
+                    data.inRotationGesture = true;
+                }
+                if (foundLeft)
+                    data.leftLost = true;
+                if (foundRight)
+                    data.rightLost = true;
 
-				if (myUserStudyManager.inTraining())
-				{
-					data.training = true;
-					data.trainingSection = myUserStudyManager.practiceFrame.ToString();
-				}
-				else
-				{
-					int index = myUserStudyManager.hologramIndex;
-					GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
-					GameObject targetObject = myUserStudyManager.targetGameObjects[index];
-					data.setTransforms(manipulatableObject, targetObject);
-				}
+                if (myUserStudyManager.inTraining())
+                {
+                    data.training = true;
+                    data.trainingSection = myUserStudyManager.practiceFrame.ToString();
+                }
+                else
+                {
+                    int index = myUserStudyManager.hologramIndex;
+                    GameObject manipulatableObject = myUserStudyManager.manipulatableGameObjects[index];
+                    GameObject targetObject = myUserStudyManager.targetGameObjects[index];
+                    data.setTransforms(manipulatableObject, targetObject);
+                }
 
-				myUserStudyManager.SaveDataExtended(data);
-			}
+                myUserStudyManager.SaveDataExtended(data);
+            }
 			if (InteractionManager.numSourceStates == 0) {
 				foundLeft = false;
 				foundRight = false;
@@ -1246,7 +1206,7 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 	public float DotProduct(Vector3 a, Vector3 b, Vector3 c) {
 		float dot = (b.x - a.x)*(c.z - a.z) - (b.z - a.z)*(c.x - a.x);
 		//if (b.z < 0)
-		//dot *= -1;
+			//dot *= -1;
 		return dot;
 	}
 

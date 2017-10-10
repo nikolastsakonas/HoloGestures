@@ -23,7 +23,7 @@ public class SaveDataClass
 {
     public SaveDataClass(TwoHandedUserStudyManager _instance)
     {
-        /*int section1 = _instance.USER_STUDY_TECHNIQUE_INDEX + 1;
+        int section1 = _instance.USER_STUDY_TECHNIQUE_INDEX + 1;
         int technique1 = _instance.USER_STUDY_TECHNIQUE + 1;
         int hologramNum = _instance.hologramIndex + 1;
 
@@ -59,12 +59,12 @@ public class SaveDataClass
 			rotationZ = manipulatableObjectRotation.z.ToString ();
 
 			localScale = manipulatableObjectLocalScale.x.ToString ();
-		}*/
+		}
     }
 
     public void setTransforms(GameObject manipulatableObject, GameObject targetObject)
     {
-        /*Quaternion manipulatableObjectRotation = manipulatableObject.transform.rotation;
+        Quaternion manipulatableObjectRotation = manipulatableObject.transform.rotation;
         Vector3 manipulatableObjectLocalScale = manipulatableObject.transform.localScale;
 
         Quaternion targetObjectRotation = targetObject.transform.rotation;
@@ -82,7 +82,7 @@ public class SaveDataClass
 
         targetLocalScale = targetObjectLocalScale.x.ToString();
 
-        angleBetweenRotations = Quaternion.Angle(manipulatableObjectRotation, targetObjectRotation).ToString();*/
+        angleBetweenRotations = Quaternion.Angle(manipulatableObjectRotation, targetObjectRotation).ToString();
     }
 
 
@@ -247,7 +247,7 @@ public class TwoHandedUserStudyManager {
 			techniquesPermuted[i] = i;
 		}
 
-		//reshuffle(techniquesPermuted);
+		reshuffle(techniquesPermuted);
 
         totalTimeInRound = new Stopwatch ();
 		totalTimeManipulating = new Stopwatch ();
@@ -297,7 +297,7 @@ public class TwoHandedUserStudyManager {
 
     public void SaveDataExtended(SaveDataClass data)
     {
-		/*string type = "N/A";
+		string type = "N/A";
 		if (data.startButtonPress) {
 			UnityEngine.Debug.Log("Event Type: startButtonPress");
 			type = "startButtonPress";
@@ -394,11 +394,11 @@ public class TwoHandedUserStudyManager {
 			string[] strings = recordingStrings.ToArray ();
             UserStudyLogger.Instance.Record (strings);
 			recordingStrings.Clear ();
-		}*/
+		}
     }
 
 	public void SaveData(GameObject manipulatableObject, GameObject targetObject, bool training) {
-		/*int technique = USER_STUDY_TECHNIQUE + 1;
+		int technique = USER_STUDY_TECHNIQUE + 1;
 		int hologramNum = hologramIndex + 1;
 		int section = USER_STUDY_TECHNIQUE_INDEX + 1;
 		string toRecord = "";
@@ -430,7 +430,7 @@ public class TwoHandedUserStudyManager {
 		UnityEngine.Debug.Log("Saving User " + currentUserID + " Data for Training: " + training + ", Technique: " + technique + "/" + NUM_TECHNIQUES + " and Hologram: " + hologramNum + "/" + hologramCount);
 		UserStudyLogger.Instance.Record(toRecord, 0);
 
-		resetStats();*/
+		resetStats();
 	}
 
     public void performTechnique(string s)
@@ -643,20 +643,16 @@ public class TwoHandedUserStudyManager {
 			handsManager.techniqueButtons[i].interactable = true;
 		}
 		handsManager.userStudyButtonText.text = "Begin User Study";
-		//handsManager.setTechnique(1);
+		handsManager.setTechnique(1);
 		handsManager.userIDText.text = "";
-		//showUserIDMenu ();
+		showUserIDMenu ();
 
 		resetStats();
 		hideInstructions ();
 		currentUserID = "";
 		USER_STUDY_TECHNIQUE = -1;
 		hologramIndex = -1;
-		resetAndShowHologramAtIndex(0, false);
-        handsManager.userStudyRoundText.gameObject.SetActive(false);
-        handsManager.userStudyOrientationText.gameObject.SetActive(false);
-		disableImages = false;
-		handsManager.setTechnique (TwoHandedGesturesManager.TECHNIQUE_SELECTED);
+		resetAndShowHologramAtIndex (0, false);
 	}
 
 	public void hideUserIDMenu() {
@@ -720,10 +716,10 @@ public class TwoHandedUserStudyManager {
                 disableTimedButton = false;
             }
 		}
-		//for (int i = 0; i < NUM_TECHNIQUES; i++) {
-		//		handsManager.techniqueButtons[i].interactable = false;
-		//		handsManager.techniqueButtons[i].enabled = true;
-		//}
+		for (int i = 0; i < NUM_TECHNIQUES; i++) {
+				handsManager.techniqueButtons[i].interactable = false;
+				handsManager.techniqueButtons[i].enabled = true;
+		}
                
 
 
@@ -737,6 +733,7 @@ public class TwoHandedUserStudyManager {
 		UnityEngine.Debug.Log("Initializing UserStudy");
 		justRested = false;
 		practiceFrame = 0;
+		handsManager.setTechnique(1);
 		IN_USER_STUDY = true;
 		if(handsManager.userIDText.text == "") return false;
 		instructionSequence = 0;
@@ -752,13 +749,10 @@ public class TwoHandedUserStudyManager {
 		hideAllHolograms();
 		hologramIndex = 0;
 
-		USER_STUDY_TECHNIQUE_INDEX = 0;
-		techniquesPermuted [0] = TwoHandedGesturesManager.TECHNIQUE_SELECTED - 1;
-		UnityEngine.Debug.Log ("!!technique selected is " + TwoHandedGesturesManager.TECHNIQUE_SELECTED);
-        //reshuffle(techniquesPermuted);
+        reshuffle(techniquesPermuted);
 
         USER_STUDY_TECHNIQUE_INDEX = 0;
-		USER_STUDY_TECHNIQUE = TwoHandedGesturesManager.TECHNIQUE_SELECTED - 1;//techniquesPermuted[USER_STUDY_TECHNIQUE_INDEX];
+		USER_STUDY_TECHNIQUE = techniquesPermuted[USER_STUDY_TECHNIQUE_INDEX];
 		UnityEngine.Debug.Log("User study technique is " + USER_STUDY_TECHNIQUE);
 		hideHologramAtIndex(0);
 		doPractice = true;
@@ -771,7 +765,6 @@ public class TwoHandedUserStudyManager {
         timeToWait = 5;
 		showInstructions();
 		hideAllHolograms();
-		UserStudyButtonPressed ();
 		return true;
 	}
 
@@ -870,7 +863,7 @@ public class TwoHandedUserStudyManager {
 
 
 			if(USER_STUDY_TECHNIQUE_INDEX < NUM_TECHNIQUES) {
-				/*for (int i = 0; i < NUM_TECHNIQUES; i++) {
+				for (int i = 0; i < NUM_TECHNIQUES; i++) {
 					if(i != USER_STUDY_TECHNIQUE) {
 						handsManager.techniqueButtons[i].interactable = false;
 						handsManager.techniqueButtons[i].enabled = true;
@@ -879,7 +872,7 @@ public class TwoHandedUserStudyManager {
 						handsManager.techniqueButtons[i].enabled = false;
 						handsManager.setTechnique(i + 1);
 					}
-				}*/
+				}
 
 				if(doPractice && USER_STUDY_TECHNIQUE_INDEX != NUM_TECHNIQUES) {
 					//completed a section
@@ -917,7 +910,10 @@ public class TwoHandedUserStudyManager {
 
 					instructionSequence = USER_STUDY_TECHNIQUE * (NUM_PRACTICE_FRAMES + 1) + practiceFrame + 1;
 
-                   	resetAndShowHologramAtIndex(hologramIndex, false);
+                    if (practiceFrame != 0)
+                        resetAndShowHologramAtIndex(hologramIndex, false);
+                    else
+                        hideAllHolograms();
 
                     if (practiceFrame == NUM_PRACTICE_FRAMES) {
 						doPractice = false;
@@ -939,7 +935,7 @@ public class TwoHandedUserStudyManager {
 						if (practiceFrame == 0) {
 							handsManager.instructionTitleText.text = handsManager.techniqueNames[USER_STUDY_TECHNIQUE] + " Technique: Training";
 							disableTimedButton = false;
-							disableImages = false;
+							disableImages = true;
 						} else {
 							disableImages = false;
 							if (practiceFrame == 1) {
@@ -1007,8 +1003,8 @@ public class TwoHandedUserStudyManager {
 						UserStudyLogger.Instance.Record (recordingStrings [i], 1);
 					}
 					USER_STUDY_TECHNIQUE_INDEX++;
-                    resetAndShowHologramAtIndex(0, false);
-            } else {
+					resetAndShowHologramAtIndex (0, false);
+			} else {
 				finishUserStudy();
 			}
 		} else {
