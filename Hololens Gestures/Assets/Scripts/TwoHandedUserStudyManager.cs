@@ -1,3 +1,37 @@
+// Copyright (C) 2017 The Regents of the University of California (Regents).
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//
+//     * Redistributions in binary form must reproduce the above
+//       copyright notice, this list of conditions and the following
+//       disclaimer in the documentation and/or other materials provided
+//       with the distribution.
+//
+//     * Neither the name of The Regents or University of California nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
+//
+// Please contact the author of this library if you have any questions.
+// Author: Nikolas Chaconas (nikolas.chaconas@gmail.com)
+
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -438,10 +472,10 @@ public class TwoHandedUserStudyManager {
 
 		if (s.Length < 9)
 			return;
-		
+
         int technique = s [0] - '0';
 
-        
+
 
 		techniquesPermuted = new int[5];
 		for (int i = 1; i < 6; i++) {
@@ -542,7 +576,7 @@ public class TwoHandedUserStudyManager {
 	}
 
 	public void resetAndShowHologramAtIndex(int index, bool showTarget) {
-		
+
 		int hologramNum = index + 1;
 		UnityEngine.Debug.Log("Resetting Hologram " + hologramNum + " and showTarget is " + showTarget);
 		Vector3 textPosition, roundTextPosition;
@@ -561,7 +595,7 @@ public class TwoHandedUserStudyManager {
 
 		TwoHandedCursorManager.extents[manipulatableObject] = manipulatableObject.GetComponent<Renderer>().bounds.extents.magnitude * TwoHandedCursorManager.RADIUS_MULTIPLIER;
 
-		
+
 		TwoHandedCursorManager.boundingCubesInverse [manipulatableObject].SetActive (true);
 
 		if(showTarget && roundStarted) {
@@ -578,7 +612,7 @@ public class TwoHandedUserStudyManager {
 			roundTextPosition = (targetObject.GetComponent<Renderer>().bounds.center + manipulatableObject.GetComponent<Renderer>().bounds.center) / 2.0f;
 
 			roundTextPosition.y += 0.6f;
-			
+
 			handsManager.userStudyRoundText.text = "Round " + hologramNum + "/" + hologramCount;
 
 			float roundTextHeight = handsManager.userStudyRoundText.preferredHeight * handsManager.menu.transform.parent.localScale.x / 2;
@@ -724,7 +758,7 @@ public class TwoHandedUserStudyManager {
 		//		handsManager.techniqueButtons[i].interactable = false;
 		//		handsManager.techniqueButtons[i].enabled = true;
 		//}
-               
+
 
 
         handsManager.instructionPanelText.text = handsManager.instructionTexts [instructionSequence];
@@ -784,7 +818,7 @@ public class TwoHandedUserStudyManager {
     {
         SaveDataClass data = new SaveDataClass(this);
         data.startButtonPress = true;
-        
+
 
         SaveDataExtended(data);
 
@@ -923,7 +957,7 @@ public class TwoHandedUserStudyManager {
 						doPractice = false;
 						disableTimedButton = true;
 						showPracticeDoneInstruction = true;
-						
+
 						SaveData (manipulatableObject, targetObject, true);
 
                         SaveDataClass data = new SaveDataClass(this);
@@ -998,9 +1032,9 @@ public class TwoHandedUserStudyManager {
                     timeToWait = 30;
 					showInstructions();
 					justManipulated = false;
-					
+
 					IN_USER_STUDY = false;
-					
+
 					UnityEngine.Debug.Log("still " + recordingStrings.Count + "strings left to record, recording now");
 					for (int i = 0; i < recordingStrings.Count; i++) {
 						UnityEngine.Debug.Log ("emptying " + recordingStrings [i]);

@@ -6,6 +6,9 @@
 /[Aa]pp/
 /Assets/AssetStoreTools*
 
+# When Developing on Mac
+.DS_Store
+
 # Visual Studio 2015 cache directory
 /.vs/
 
