@@ -91,6 +91,8 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 
 	public static int TECHNIQUE_SELECTED = TECHNIQUE_1;
 
+	public const bool FIX_AXIS = true;
+
 	public GameObject leftLine;
 	public GameObject rightLine;
 	public GameObject leftTriangle;
@@ -217,27 +219,22 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 	internal static TwoHandedRotationManager myRotateManager;
 	internal static TwoHandedUserStudyManager myUserStudyManager;
 
-	static bool isLoaded = false;
-
 	public void setTechnique(int type) {
 		if (type == TECHNIQUE_5)
 			BoundBoxes_BoundBox.initialized = false;
 
 		TwoHandedGesturesManager.TECHNIQUE_SELECTED = type;
-		print ("TECHNIQUE IS NOWs SET TO " + type);
 		int index = myUserStudyManager.hologramIndex + 1;
 		int section = myUserStudyManager.USER_STUDY_TECHNIQUE_INDEX + 1;
 
         if (myUserStudyManager.IN_USER_STUDY)
         {
-			menuText.text = "Section " + section + " of " + TwoHandedUserStudyManager.NUM_TECHNIQUES + ", Round " + index + " of " + myUserStudyManager.hologramCount;
-            //
+					menuText.text = "Section " + section + " of " + TwoHandedUserStudyManager.NUM_TECHNIQUES + ", Round " + index + " of " + myUserStudyManager.hologramCount;
 
-			TwoHandedGesturesManager.TECHNIQUE_SELECTED = type;
-			myUserStudyManager.finishUserStudy();
-			//myUserStudyManager.initializeUserStudy();
-			Update();
-			myUserStudyManager.UserStudyButtonPressed ();
+					TwoHandedGesturesManager.TECHNIQUE_SELECTED = type;
+					myUserStudyManager.finishUserStudy();
+					Update();
+					myUserStudyManager.UserStudyButtonPressed ();
         }
         else
             menuText.text = techniqueNames[type - 1];
@@ -247,16 +244,10 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 
 	void changeGestureType(int i) {
 		technique5Selection = i;
-		print("selection is now " + i);
 	}
 
 	void Awake () {
-		print ("here");
-		print("isloaded is " + isLoaded);
 		if (_instance != null && _instance != this) {
-			print ("Destorying myself");
-			//resetNullObjects ();
-
 			Destroy(Managers);
 			Destroy(GameObjectCollection);
 			Destroy(HologramCollection);
@@ -265,7 +256,6 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 			Destroy(BoundingSphere);
 			Destroy(Technique5Objects);
 		} else {
-			print ("not destroying myself");
 			_instance = this;
 			DontDestroyOnLoad(GameObject.Find("Managers"));
 			DontDestroyOnLoad (GameObject.Find ("GameObjectCollection"));
@@ -541,7 +531,6 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 			setInteractable(beginUserStudyButton);
 			userStudyButtonText.text = "Continue";
 			myUserStudyManager.gestureAttempts++;
-			print("beginning manipulation timer");
 			myUserStudyManager.totalTimeManipulating.Start();
 
 			SaveDataClass data = new SaveDataClass(myUserStudyManager);
@@ -682,7 +671,7 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		rightFound = leftFound = trackedFound = false;
 
 		if (states.Length > 2)
-			print ("UUUHH OHHH");
+			print ("More states registered than number of hands...Do you have more than two hands?");
 
 		for (int i = 0; i < states.Length; i++) {
 			Vector3 pos;
@@ -909,7 +898,6 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 		{
 			Debug.Log("Detected key code: " + e.keyCode.ToString());
 			sentText += e.keyCode.ToString();
-			print("sent text is now " + sentText);
 			if (e.keyCode.ToString().Equals("X"))
 			{
 				sentText = "";
@@ -958,7 +946,6 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 					sentText = sentText.Replace("USER", "");
 					sentText = sentText.Replace("Alpha", "");
 
-					print("result is " + sentText);
 					userIDText.text = sentText;
 					myUserStudyManager.UserStudyButtonPressed ();
 					sentText = "";
@@ -1045,8 +1032,8 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 	}
 	// Update is called once per frame
 	void Update () {
+		// Hardcode User ID
 		userIDText.text = "101";
-		//print ("camera is at " + Camera.main.transform.position);
 		if (myUserStudyManager.disableImages) {
 			showWireBox = false;
 
@@ -1068,19 +1055,12 @@ public class TwoHandedGesturesManager : Singleton<TwoHandedGesturesManager>, IIn
 			player.Play ();
 
 		if(myUserStudyManager.IN_USER_STUDY && (myUserStudyManager.USER_STUDY_TECHNIQUE_INDEX == TwoHandedUserStudyManager.NUM_TECHNIQUES)) {
-			// print("beginUserStudyButton: Enabled: true Interactable: true");
 			beginUserStudyButton.enabled = true;
 			setInteractable(beginUserStudyButton);
 			myUserStudyManager.USER_STUDY_TECHNIQUE_INDEX++;
 		}
 		if(!myUserStudyManager.IN_USER_STUDY) {
-			//if(userIDText.text == "") {
-			// print("beginUserStudyButton: Enabled: unknown Interactable: false");
-			//beginUserStudyButton.interactable = false;
-			//} else {
-			// print("beginUserStudyButton: Enabled: true Interactable: true");
 			setInteractable(beginUserStudyButton);
-			//}
 		} else {
 			if(instructionPanel.activeSelf && !myUserStudyManager.disableTimedButton) {
 				int seconds = myUserStudyManager.timeToWait;

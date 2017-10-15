@@ -88,14 +88,11 @@ public class TwoHandedRotationManager {
 		float currentRightFaceDistance = Vector3.Distance (cameraPosition, handsManager.rightHandPosition);
 		float currentLeftFaceDistance = Vector3.Distance (cameraPosition, handsManager.leftHandPosition);
 		float sign;
-		Quaternion rotation;
 		float angle;
 		Vector3 cross;
 		Vector3 newPosition, oldPosition;
 		int resetFrames = NUM_FRAMES_RESET;
 		Vector3 rotationAxis = handsManager.axisForRotation;
-		Vector3 pitchAxis, rollAxis, yawAxis;
-		float rollSign, yawSign, pitchSign;
 
 		if(handsManager.rotationFrameNumber == 0) {
 			SetInitialPositions(handsManager.initialRight, handsManager.initialLeft);
@@ -131,8 +128,6 @@ public class TwoHandedRotationManager {
 				angle = -(Vector3.Angle(oldRightSide, newRightSide) + Vector3.Angle(oldLeftSide, newLeftSide)) / 2;
 
 				cross = Vector3.Cross(newRightSide, oldRightSide);
-
-				rotation = Quaternion.AngleAxis(angle, cross);
 
 				// attempt at pitch starts here
 				sign = ((handsManager.rightHandPosition.y - rotationInitialRight.y) + (handsManager.leftHandPosition.y - rotationInitialLeft.y))/3;
@@ -176,12 +171,10 @@ public class TwoHandedRotationManager {
 		case wireFrameRotation:
 				float initialDistance;
 				float newDistance;
-				Vector3 C, A, B;
+				Vector3 C, A;
 
 				C = handsManager.handBeingTrackedPosition;
 				A = handsManager.initialHandBeingTrackedPosition;
-				B = handsManager.objCenter;
-
 
 				initialDistance = Vector3.Distance (handsManager.initialHandBeingTrackedPosition, handsManager.objCenter);
 				newDistance = Vector3.Distance (handsManager.handBeingTrackedPosition, handsManager.objCenter);
@@ -206,22 +199,6 @@ public class TwoHandedRotationManager {
 				++handsManager.rotationFrameNumber;
 			return;
 			case selectionRotation:
-				// switch(handsManager.technique5Selection) {
-				// 	case 0:
-				// 		sign = handsManager.initialArcballHandPosition.y - rotationInitialRight.y;
-				// 		RotateOnAxis(sign, rotationAxis, ref lastPitchRotationAmount);
-				// 		break;
-				// 	case 1:
-				// 		sign = ((initialRightFaceDistance - currentRightFaceDistance) + (currentLeftFaceDistance - initialLeftFaceDistance))/2;
-				// 		RotateOnAxis(sign, rotationAxis, ref lastYawRotationAmount);
-				// 		break;
-				// 	case 2:
-				// 		sign = ((handsManager.rightHandPosition.y - rotationInitialRight.y) + (rotationInitialLeft.y - handsManager.leftHandPosition.y))/2;
-				// 		RotateOnAxis(sign, rotationAxis, ref lastRollRotationAmount);
-				// 		break;
-				//
-				// }
-
 				newPosition = handsManager.arcBallHandPosition - handsManager.objCenter;
 				oldPosition = handsManager.initialArcballHandPosition - handsManager.objCenter;
 

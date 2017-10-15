@@ -51,7 +51,6 @@ public class TwoHandedResizeManager {
 		float newDistance;
 		float linearScale;
 		float scale;
-		float difference;
 
 		if(TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5) {
 			initialDistance = Vector3.Distance (handsManager.initialHandBeingTrackedPosition, handsManager.objCenter);
@@ -74,20 +73,14 @@ public class TwoHandedResizeManager {
 		}
 
 		linearScale = newDistance / initialDistance;
-		difference = newDistance - initialDistance;
 
 		if(TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5) {
 			scale = (float)Mathf.Pow(linearScale, 15f);
 		} else if(TwoHandedGesturesManager.TECHNIQUE_SELECTED != TwoHandedGesturesManager.TECHNIQUE_3)
 			scale = (float)Mathf.Pow(linearScale, 4f);
 		else {
-			// print(difference);
-			// if(Mathf.Abs(difference) > .01)
 				scale = (float)Mathf.Pow(linearScale, 2f);
-			// else
-			// 	return;
 		}
-
 
 
 		Vector3 newSize = handsManager.initialSize;

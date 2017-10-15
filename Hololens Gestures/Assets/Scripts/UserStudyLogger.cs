@@ -55,10 +55,6 @@ public class UserStudyLogger : Singleton<UserStudyLogger>
 	public string FileNameExtraTime = "UserDataExtra";
     public string FolderName = "UserData";
 
-    private bool EnableRecording = false;
-    private float samplingDeltaTime = 0;
-    private float writeToFileDeltaTime = 0;
-
 #if !UNITY_EDITOR
     private StorageFolder saveFolder;
     public StorageFile saveFile, saveFileExtended;

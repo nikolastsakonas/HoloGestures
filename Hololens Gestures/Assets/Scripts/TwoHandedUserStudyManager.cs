@@ -540,7 +540,6 @@ public class TwoHandedUserStudyManager {
         player.source = VideoSource.VideoClip;
         player.clip = handsManager.videosToPlay[seq];
         player.Prepare();
-        UnityEngine.Debug.Log("preparing the next clip!");
     }
 
 	public void hideInstructions() {
@@ -565,7 +564,6 @@ public class TwoHandedUserStudyManager {
 	}
 
 	public void resetStats() {
-		UnityEngine.Debug.Log("Resetting statistics!");
 		totalTimeInRound.Reset();
 		totalTimeManipulating.Reset();
 		leftHandLosses = 0;
@@ -630,7 +628,6 @@ public class TwoHandedUserStudyManager {
 			hologramShown = true;
             //reset stats
             resetStats();
-            UnityEngine.Debug.Log("beginning total time timer!");
             totalTimeInRound.Start();
         } else if(!showTarget) {
             manipulatableObject.SetActive(true);
@@ -639,16 +636,11 @@ public class TwoHandedUserStudyManager {
 			textPosition = manipulatableObject.GetComponent<Renderer>().bounds.center;
 			textPosition.y -= manipulatableObject.GetComponent<Renderer>().bounds.size.y*2;
 
-            float textHeight = handsManager.userStudyOrientationText.preferredHeight * handsManager.menu.transform.parent.localScale.x / 4.0f;
-            //textPosition.y -= textHeight;
-
             handsManager.userStudyOrientationText.transform.position = textPosition;
             handsManager.userStudyOrientationText.gameObject.SetActive(true);
 
-
             //reset stats
             resetStats();
-            UnityEngine.Debug.Log("beginning total time timer!");
             totalTimeInRound.Start();
         } else if (!roundStarted)
         {
@@ -669,7 +661,6 @@ public class TwoHandedUserStudyManager {
 
 	public void finishUserStudy() {
 		IN_USER_STUDY = false;
-		UnityEngine.Debug.Log ("finishing user study!");
 		justManipulated = false;
 		instructionSequence = 0;
 		for (int i = 0; i < NUM_TECHNIQUES; i++) {
@@ -788,7 +779,6 @@ public class TwoHandedUserStudyManager {
 
 		USER_STUDY_TECHNIQUE_INDEX = 0;
 		techniquesPermuted [0] = TwoHandedGesturesManager.TECHNIQUE_SELECTED - 1;
-		UnityEngine.Debug.Log ("!!technique selected is " + TwoHandedGesturesManager.TECHNIQUE_SELECTED);
         //reshuffle(techniquesPermuted);
 
         USER_STUDY_TECHNIQUE_INDEX = 0;
@@ -888,7 +878,6 @@ public class TwoHandedUserStudyManager {
 				disableImages = false;
                 //Maybe save data here
                 //saves the practice data
-                UnityEngine.Debug.Log("saving practice data");
 				SaveData (manipulatableObject, targetObject, true);
 
                 int numFrames = NUM_PRACTICE_FRAMES + 1;
@@ -920,7 +909,6 @@ public class TwoHandedUserStudyManager {
 					if(USER_STUDY_TECHNIQUE_INDEX != 0 && !justRested && !reset) {
 						justRested = true;
 						int left = NUM_TECHNIQUES - USER_STUDY_TECHNIQUE_INDEX;
-						int nextSection = USER_STUDY_TECHNIQUE_INDEX + 1;
 						instructionSequence = REST_SEQUENCE;
 						hideAllHolograms();
 						string word = " section";
@@ -1020,7 +1008,6 @@ public class TwoHandedUserStudyManager {
 					justManipulated = true;
 				}
 			} else if(USER_STUDY_TECHNIQUE_INDEX == NUM_TECHNIQUES && justManipulated) {
-					int nextSection = USER_STUDY_TECHNIQUE_INDEX + 1;
 					instructionSequence = REST_SEQUENCE;
 					hideAllHolograms();
 					disableTimedButton = false;
@@ -1035,9 +1022,7 @@ public class TwoHandedUserStudyManager {
 
 					IN_USER_STUDY = false;
 
-					UnityEngine.Debug.Log("still " + recordingStrings.Count + "strings left to record, recording now");
 					for (int i = 0; i < recordingStrings.Count; i++) {
-						UnityEngine.Debug.Log ("emptying " + recordingStrings [i]);
 						UserStudyLogger.Instance.Record (recordingStrings [i], 1);
 					}
 					USER_STUDY_TECHNIQUE_INDEX++;

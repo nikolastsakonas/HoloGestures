@@ -78,13 +78,9 @@ public class TwoHandedCursorManager
 
 	public static void SetBoundingCubeSize(GameObject g, GameObject boundingCube) {
 		Bounds b = g.GetComponent<Renderer>().bounds;
-		float largestSide = Mathf.Max (Mathf.Max (b.size.x, b.size.y), b.size.z);
 		Vector3 boundingSize;
 
 		boundingCube.transform.position = b.center;
-		// boundingSize.x = Mathf.Max(largestSide/2, b.size.x);
-		// boundingSize.y = Mathf.Max(largestSide/2, b.size.y);
-		// boundingSize.z = Mathf.Max(largestSide/2, b.size.z);
 		boundingSize = b.size;
 		boundingSize *= BOUNDING_BOX_SCALE_FACTOR;
 		boundingCube.transform.localScale = boundingSize;
@@ -152,7 +148,6 @@ public class TwoHandedCursorManager
 		Vector3 point;
 		bool hit = false;
 		bool getDistance = true;
-		float min_distance = 4.0f;
 		RaycastHit hitInfo;
 		oldCube = cube;
 		Vector3 normal = Camera.main.transform.position.normalized;

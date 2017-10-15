@@ -101,10 +101,8 @@ public class TwoHandedArrowsManager {
         handsManager.MoveObject(handsManager.rotationImage, pos);
         handsManager.rotationImage.transform.LookAt(2 * pos - Camera.main.transform.position);
 
-        Vector3 gazeDirection = handsManager.objCenter - Camera.main.transform.position;
         Vector3 begin = GetBoundingCornerPosition(.003f, 0.015f, .06f, handsManager.rotationImage);
         Vector3 end = GetBoundingCornerPosition(.003f, 0.03f, -.06f, handsManager.rotationImage);
-        float distance = Vector3.Distance(begin, end);
         PositionLine(rotationAxisRenderer2, begin, end);
         rotationAxisRenderer2.enabled = true;
         rotationAxisRenderer.enabled = false;
@@ -157,12 +155,8 @@ public class TwoHandedArrowsManager {
 		handsManager.technique2Image.transform.LookAt (2 * technique2ImagePosition - Camera.main.transform.position);
 		handsManager.technique2Image.SetActive(true);
 
-		Vector3 gazeDirection = handsManager.objCenter - Camera.main.transform.position;
 		Vector3 begin = GetBoundingCornerPosition (.07f, 0.025f, .06f, handsManager.technique2Image);
 		Vector3 end = GetBoundingCornerPosition (.07f, 0.04f, -.06f, handsManager.technique2Image);
-
-		float axisLength = 0.12f;
-		float distance = Vector3.Distance(begin, end);
 
 		PositionLine (rotationAxisRenderer2, begin, end);
 		rotationAxisRenderer2.enabled = true;
@@ -354,7 +348,6 @@ public class TwoHandedArrowsManager {
 		float axisLength;
 		Vector3 imagePosition2;
 		float amountTowards = 0.1f;
-		float imageHeight = handsManager.yawImage.transform.localScale.y * 0.4f;
 
 		handsManager.yawImage.SetActive (false);
 		handsManager.pitchImage.SetActive (false);
@@ -440,7 +433,6 @@ public class TwoHandedArrowsManager {
 		float triangleHeightLarge = endHeight + .005f;
 		float triangleWidthSmall = width + amount2;
 		float triangleHeightSmall = height + amount2;
-		float farAmount = 0;
 		float rotWidthLarge = triangleWidthSmall;
 		float rotWidthSmall = width  - amount2;
 		float rotHeight = height/6 + amount2;
@@ -455,7 +447,6 @@ public class TwoHandedArrowsManager {
 		Vector3 rightTrianglePosition2;
 		Vector3 rightTrianglePosition3;
 
-		bool setTriangles = false;
 		rightLineRenderer.enabled = true;
 		leftLineRenderer.enabled = true;
 		Vector3 imagePosition;
@@ -883,15 +874,10 @@ public class TwoHandedArrowsManager {
 						} else {
 							//Technique 1 ready position
 								//set left line
-							//leftArrowPositionBegin = GetBoundingCornerPosition (-width, 0, -length, handsManager.boundingCube);
 							leftArrowPositionEnd = GetBoundingCornerPosition (-(endWidth + arrowLength), 0, -length, handsManager.boundingCube);
 
 									//set right line
-							//rightArrowPositionBegin = GetBoundingCornerPosition (width, 0, -length, handsManager.boundingCube);
 							rightArrowPositionEnd = GetBoundingCornerPosition ((endWidth + arrowLength), 0, -length, handsManager.boundingCube);
-
-							//PositionLine (leftLineRenderer, leftArrowPositionBegin, leftArrowPositionEnd);
-							//PositionLine (rightLineRenderer, rightArrowPositionBegin, rightArrowPositionEnd);
 
 							handsManager.HideObject (handsManager.leftTriangle);
 							handsManager.HideObject (handsManager.rightTriangle);
@@ -1015,24 +1001,32 @@ public class TwoHandedArrowsManager {
 	}
 
 	public void setRotationAxis() {
-		Vector3 initialGazeDirection = TwoHandedGesturesManager.rotating ? TwoHandedRotationManager.initialGazeDirection : handsManager.objCenter - Camera.main.transform.position;
-
 		if((handsManager.rotationType == TwoHandedRotationManager.yawRotation) || (handsManager.technique5Selection == 1)
 			&& (TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_6) ||
 			((TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5) && (TwoHandedCursorManager.sphereIndexUnderCursor < 4))) {
+				// should add a condition for axis align or not
 				handsManager.axisForRotation = Vector3.up;
 		}
 		else if((handsManager.rotationType == TwoHandedRotationManager.pitchRotation) || (handsManager.technique5Selection == 0)
 			&& (TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_6) ||
 			((TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5) && (TwoHandedCursorManager.sphereIndexUnderCursor < 6))) {
-				//handsManager.axisForRotation = Vector3.Cross(Vector3.up, initialGazeDirection);
-				handsManager.axisForRotation = new Vector3(1, 0, 0);
+
+				if(handsManager.FIX_AXIS) {
+					handsManager.axisForRotation = new Vector3(1, 0, 0);
+				} else {
+					handsManager.axisForRotation = Vector3.Cross(Vector3.up, initialGazeDirection);
+				}
+
 		}
 		else if((handsManager.rotationType == TwoHandedRotationManager.rollRotation) || (handsManager.technique5Selection == 2)
 			&& (TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_6) ||
 			(TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5)) {
-				//handsManager.axisForRotation = initialGazeDirection;
-				handsManager.axisForRotation = new Vector3(0, 0, 1);
+
+				if(handsManager.FIX_AXIS) {
+					handsManager.axisForRotation = new Vector3(0, 0, 1);
+				} else {
+					handsManager.axisForRotation = initialGazeDirection;
+				}
 		}
 	}
 
