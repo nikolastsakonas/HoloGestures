@@ -1001,6 +1001,7 @@ public class TwoHandedArrowsManager {
 	}
 
 	public void setRotationAxis() {
+		Vector3 initialGazeDirection = TwoHandedGesturesManager.rotating ? TwoHandedRotationManager.initialGazeDirection : handsManager.objCenter - Camera.main.transform.position;
 		if((handsManager.rotationType == TwoHandedRotationManager.yawRotation) || (handsManager.technique5Selection == 1)
 			&& (TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_6) ||
 			((TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5) && (TwoHandedCursorManager.sphereIndexUnderCursor < 4))) {
@@ -1011,7 +1012,7 @@ public class TwoHandedArrowsManager {
 			&& (TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_6) ||
 			((TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5) && (TwoHandedCursorManager.sphereIndexUnderCursor < 6))) {
 
-				if(handsManager.FIX_AXIS) {
+				if(TwoHandedGesturesManager.FIX_AXIS) {
 					handsManager.axisForRotation = new Vector3(1, 0, 0);
 				} else {
 					handsManager.axisForRotation = Vector3.Cross(Vector3.up, initialGazeDirection);
@@ -1022,7 +1023,7 @@ public class TwoHandedArrowsManager {
 			&& (TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_6) ||
 			(TwoHandedGesturesManager.TECHNIQUE_SELECTED == TwoHandedGesturesManager.TECHNIQUE_5)) {
 
-				if(handsManager.FIX_AXIS) {
+				if(TwoHandedGesturesManager.FIX_AXIS) {
 					handsManager.axisForRotation = new Vector3(0, 0, 1);
 				} else {
 					handsManager.axisForRotation = initialGazeDirection;
