@@ -1,5 +1,5 @@
 # HoloGestures
-A Comparsion of Two-Handed Gestures on the Hololens
+An Evaluation of Bimanual Gestures on the Microsoft HoloLens
 
 ## Abstract
 We developed and evaluated two-handed gestures on the Microsoft HoloLens to manipulate augmented reality annotations through rotation and scale operations. We explore the design space of bimanual interactions on head-worn AR platforms, with the intention of dedicating two-handed gestures to rotation and scaling manipulations while reserving one-handed interactions to drawing annotations.
