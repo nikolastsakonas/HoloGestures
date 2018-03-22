@@ -4,7 +4,8 @@ This work incorporates many different techniques for bimanual interaction on the
 
 ## Compilation Instructions
 
-```cd HoloGestures/Hololens\ Gestures/"
+```
+cd HoloGestures/Hololens\ Gestures/
 mkdir App
 ```
 
@@ -12,7 +13,8 @@ Open the Unity application. The current version of the application was developed
 
 Within Unity, navigate to file -> build settings -> Build with the following settings:
 
-```Scenes in Build: Gestures
+```
+Scenes in Build: Gestures
 Platform: Windows Store
 SDK: Universal 10
 Target Device: HoloLens
